@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>AeroTrace</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <h1>Symptom tracker</h1>
+        <label for="symptoms"> Choose symptoms:</label>
+        <select name="symptoms[]" id="symptoms" multiple>
+            <option value="running-nose">Running nose</option>
+            <option value="headache">Headache</option>
+            <option value="hives">Hives</option>
+            <option value="itching">Itching</option>
+            <option value="swelling">Swelling</option>
+            <option value="wheezing">Wheezing</option>
+            <option value="shortness-of-breath">Shortness of Breath</option>
+            <option value="nausea">Nausea</option>
+            <option value="dizziness">Dizziness</option>
+            <option value="other">Other</option>
+        </select>
+
+
+        
+        <label for="date">Select a date:</label>
+        <input type="date" id="date">
+
+        <label>Time of day:</label>
+        <select name="timing" id="timing">
+            <option value="morning">Morning</option>
+            <option value="afternoon">Afternoon</option>
+            <option value="evening">Evening</option>
+
+        </select>
+
+        <button id="submit">Add symptoms</button>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Symptom</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                </tr>
+            </thead>
+
+            <tbody id="symptomList">
+            </tbody>
+        </table>
+    <script src="script.js"></script>
+    </body>
+</html>
+
+<!-- 
+symptoms
+
+running nose
+headache
+hives
+itching
+swelling
+wheezing
+shortness of breath
+nausea
+dizziness
+other
+
+
+-->
