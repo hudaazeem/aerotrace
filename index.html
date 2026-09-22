@@ -33,6 +33,18 @@
 
         </select>
 
+        <label>Severity:</label>
+        <select name="severity" id="severity">
+            <option value="1">1 - Very Mild</option>
+            <option value="2">2 - Mild</option>
+            <option value="3">3 - Moderate</option>
+            <option value="4">4 - Severe</option>
+            <option value="5">5 - Very Severe</option>
+        </select>
+
+        <label>Location:</label>
+        <textarea id="location">type zipcode here</textarea>
+
         <button id="submit">Add symptoms</button>
 
         <table>
@@ -41,6 +53,9 @@
                     <th>Symptom</th>
                     <th>Date</th>
                     <th>Time</th>
+                    <th>Severity</th>
+                    <th>Location</th>
+                    <th>Action</th>
                 </tr>
             </thead>
 
