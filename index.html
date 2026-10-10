@@ -42,8 +42,10 @@
             <option value="5">5 - Very Severe</option>
         </select>
 
-        <label>Location:</label>
-        <textarea id="location">type zipcode here</textarea>
+        <label for="location">Location:</label>
+        <input type = "text" id="location" placeholder="Enter ZIP code" maxlength="5" inputmode="numeric" pattern="[0-9]{5}">
+
+        <label><input type="checkbox" id="loggingNow"> I'm experiencing these symptoms right now.</label>
 
         <button id="submit">Add symptoms</button>
 

@@ -6,6 +6,7 @@ const dateInput = document.getElementById('date');
 const timeSelect = document.getElementById('timing');
 const severitySelect = document.getElementById('severity');
 const locationInput = document.getElementById('location');
+const loggingNow = document.getElementById('loggingNow');
 const table = document.getElementById('symptomList');
 
 
@@ -16,8 +17,36 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 submit.addEventListener('click', addSymptoms);
+loggingNow.addEventListener('change', ()=> {
+    if(loggingNow.checked){
+        const today = new Date();
 
-function addSymptoms(){
+        const year = today.getFullYear();
+        const month = String(today.getMonth()+1).padStart(2, '0');
+        const day = String(today.getDate()).padStart(2, '0');
+
+        const formattedDate = `${year}-${month}-${day}`;
+
+        dateInput.value=formattedDate;
+        dateInput.disabled = true;
+
+        const hour = today.getHours();
+        timeSelect.disabled = true;
+        if(hour>=5&&hour<12){
+            timeSelect.value = 'morning';
+        }else if(hour >=12 && hour<17){
+            timeSelect.value = 'afternoon';
+        }else{
+            timeSelect.value = 'evening';
+        }
+
+    }else{
+        dateInput.disabled = false;
+        timeSelect.disabled = false;
+    }
+});
+
+async function addSymptoms(){
     const selectedSymptoms = Array.from(symptomSelect.selectedOptions).map(option => option.value);
 
     const date = dateInput.value;
@@ -26,10 +55,16 @@ function addSymptoms(){
     
     const severity = severitySelect.value;
 
-    const location = locationInput.value;
+    const location = locationInput.value.trim();
+    const zipPattern = /^[0-9]{5}$/;
 
-    if(selectedSymptoms.length === 0 || date === '' || timeOfDay === '' || severity === '' || location === '' || location.length !=5){
+    if(selectedSymptoms.length === 0 || date === '' || timeOfDay === '' || severity === '' || !zipPattern.test(location)){
         alert('Please complete all fields');
+        return;
+    }
+
+    if(!zipPattern.test(location)){
+        alert('Please enter a valid 5-digit ZIP code.');
         return;
     }
 
@@ -53,6 +88,10 @@ function addSymptoms(){
     dateInput.value = '';
     timeSelect.value = 'morning';
     severitySelect.value = '1';
+
+    loggingNow.checked = false;
+    dateInput.disabled = false;
+    timeSelect.disabled = false;
 }
 
 function renderSymptoms() {
@@ -100,4 +139,47 @@ function renderSymptoms() {
 
 function updateStorage(){
     localStorage.setItem('symptoms', JSON.stringify(symptoms));
+}
+
+
+async function getLocation(zipcode){
+    const response = await fetch(`https://api.zippopotam.us/us/${zipcode}`);
+    if(!response.ok){
+        throw new Error("Invalid ZIP code");
+    }
+    
+    const data = await response.json();
+
+    return {
+        latitude: data.places[0].latitude,
+        longitude: data.places[0].longitude
+    }
+
+}
+
+async function getAirQuality(latitude, longitude){
+    const response = await fetch(`https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${latitude}&longitude=${longitude}&current=us_aqi,pm2_5,pm10,ozone,nitrogen_dioxide,carbon_monoxide`);
+    
+    if(!response.ok){
+        throw new Error("Unable to retrieve air quality data");
+    }
+    
+    const data = await response.json();
+
+    return {
+        aqi: data.current.us_aqi,
+        pm25: data.current.pm2_5,
+        pm10: data.current.pm10,
+        ozone: data.current.ozone,
+        no2: data.current.nitrogen_dioxide,
+        co: data.current.carbon_monoxide
+    }
+}
+
+async function getEnvironmentalData(zipcode){
+    const location = await getLocation(zipcode);
+
+    const airQuality = await getAirQuality(location.latitude, location.longitude)
+
+    return airQuality;
 }
