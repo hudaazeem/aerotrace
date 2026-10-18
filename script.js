@@ -8,7 +8,7 @@ const severitySelect = document.getElementById('severity');
 const locationInput = document.getElementById('location');
 const loggingNow = document.getElementById('loggingNow');
 const table = document.getElementById('symptomList');
-
+const noSymptoms = document.getElementById('noSymptoms');
 
 window.addEventListener('DOMContentLoaded', () => {
     const saved = JSON.parse(localStorage.getItem('symptoms')) || [];
@@ -46,6 +46,15 @@ loggingNow.addEventListener('change', ()=> {
     }
 });
 
+noSymptoms.addEventListener('change', ()=> {
+    symptomSelect.disabled = noSymptoms.checked;
+    severitySelect.disabled = noSymptoms.checked;
+
+    if(noSymptoms.checked){
+        symptomSelect.selectedIndex = -1;
+    }
+})
+
 async function addSymptoms(){
     const selectedSymptoms = Array.from(symptomSelect.selectedOptions).map(option => option.value);
 
@@ -58,7 +67,7 @@ async function addSymptoms(){
     const location = locationInput.value.trim();
     const zipPattern = /^[0-9]{5}$/;
 
-    if(selectedSymptoms.length === 0 || date === '' || timeOfDay === '' || severity === '' || !zipPattern.test(location)){
+    if((!noSymptoms.checked && selectedSymptoms.length === 0) || date === '' || timeOfDay === '' || (severity === '' &&!noSymptoms.checked)){
         alert('Please complete all fields');
         return;
     }
@@ -68,13 +77,43 @@ async function addSymptoms(){
         return;
     }
 
+    let airQuality = null;
+
+    if(loggingNow.checked){
+        try{
+            airQuality= await getEnvironmentalData(location);
+        }catch(error){
+            console.log(error.message);
+        }
+    }
+
+    console.log(airQuality);
+
+    const observationId=crypto.randomUUID();
+
+    if(noSymptoms.checked){
+        symptoms.push({
+            observationId: observationId,
+            symptom: null, 
+            date: date,
+            time: timeOfDay, 
+            severity: 0, 
+            location: location,
+            airQuality: airQuality,
+            loggedAt: new Date().toISOString()
+        })
+    }
+
     selectedSymptoms.forEach(symptom => {
         const symptomEntry = {
+            observationId: observationId,
             symptom: symptom,
             date: date,
             time: timeOfDay,
-            severity: severity,
-            location: location
+            severity: Number(severity),
+            location: location,
+            airQuality: airQuality,
+            loggedAt: new Date().toISOString()
         }
         symptoms.push(symptomEntry);
     });
@@ -92,6 +131,10 @@ async function addSymptoms(){
     loggingNow.checked = false;
     dateInput.disabled = false;
     timeSelect.disabled = false;
+
+    noSymptoms.checked = false;
+    symptomSelect.disabled = false;
+    severitySelect.disabled = false;
 }
 
 function renderSymptoms() {
@@ -172,7 +215,8 @@ async function getAirQuality(latitude, longitude){
         pm10: data.current.pm10,
         ozone: data.current.ozone,
         no2: data.current.nitrogen_dioxide,
-        co: data.current.carbon_monoxide
+        co: data.current.carbon_monoxide,
+        time: data.current.time
     }
 }
 
