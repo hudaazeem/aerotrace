@@ -78,10 +78,14 @@ async function addSymptoms(){
     }
 
     let airQuality = null;
+    let pollen = null;
 
     if(loggingNow.checked){
         try{
-            airQuality= await getEnvironmentalData(location);
+            const environmentalData = await getEnvironmentalData(location);
+            airQuality= environmentalData.airQuality;
+            pollen= environmentalData.pollen;
+
         }catch(error){
             console.log(error.message);
         }
@@ -100,6 +104,7 @@ async function addSymptoms(){
             severity: 0, 
             location: location,
             airQuality: airQuality,
+            pollen: pollen,
             loggedAt: new Date().toISOString()
         })
     }
@@ -113,6 +118,7 @@ async function addSymptoms(){
             severity: Number(severity),
             location: location,
             airQuality: airQuality,
+            pollen: pollen,
             loggedAt: new Date().toISOString()
         }
         symptoms.push(symptomEntry);
@@ -220,10 +226,25 @@ async function getAirQuality(latitude, longitude){
     }
 }
 
+async function getPollen(latitude, longitude){
+    const response = await fetch (`http://localhost:3000/api/pollen?latitude=${latitude}&longitude=${longitude}`);
+    if(!response.ok){
+        throw new Error("Unable to retrieve pollen data");
+
+        
+    }
+    const data = await response.json();
+    return data;
+}
 async function getEnvironmentalData(zipcode){
     const location = await getLocation(zipcode);
 
-    const airQuality = await getAirQuality(location.latitude, location.longitude)
+    const airQuality = await getAirQuality(location.latitude, location.longitude);
 
-    return airQuality;
+    const pollen = await getPollen(location.latitude, location.longitude);
+
+    return {
+        airQuality: airQuality,
+        pollen: pollen
+    }
 }
