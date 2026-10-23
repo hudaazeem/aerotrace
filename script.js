@@ -234,6 +234,7 @@ async function getPollen(latitude, longitude){
         
     }
     const data = await response.json();
+    console.log("Pollen data:", data);
     return data;
 }
 async function getEnvironmentalData(zipcode){

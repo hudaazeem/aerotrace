@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>AeroTrace</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <h1>Symptom tracker</h1>
+        <label for="symptoms"> Choose symptoms:</label>
+        <select name="symptoms[]" id="symptoms" multiple>
+            <option value="running-nose">Running nose</option>
+            <option value="headache">Headache</option>
+            <option value="hives">Hives</option>
+            <option value="itching">Itching</option>
+            <option value="swelling">Swelling</option>
+            <option value="wheezing">Wheezing</option>
+            <option value="shortness-of-breath">Shortness of Breath</option>
+            <option value="nausea">Nausea</option>
+            <option value="dizziness">Dizziness</option>
+            <option value="other">Other</option>
+        </select>
+
+
+        
+        <label for="date">Select a date:</label>
+        <input type="date" id="date">
+
+        <label>Time of day:</label>
+        <select name="timing" id="timing">
+            <option value="morning">Morning</option>
+            <option value="afternoon">Afternoon</option>
+            <option value="evening">Evening</option>
+
+        </select>
+
+        <label>Severity:</label>
+        <select name="severity" id="severity">
+            <option value="1">1 - Very Mild</option>
+            <option value="2">2 - Mild</option>
+            <option value="3">3 - Moderate</option>
+            <option value="4">4 - Severe</option>
+            <option value="5">5 - Very Severe</option>
+        </select>
+
+        <label for="location">Location:</label>
+        <input type = "text" id="location" placeholder="Enter ZIP code" maxlength="5" inputmode="numeric" pattern="[0-9]{5}">
+
+        <label><input type="checkbox" id="loggingNow"> I'm experiencing these symptoms right now.</label>
+
+        <label><input type="checkbox" id="noSymptoms"> I'm not experiencing any symptoms.</label>
+
+        <button id="submit">Add symptoms</button>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Symptom</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Severity</th>
+                    <th>Location</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody id="symptomList">
+            </tbody>
+        </table>
+    <script src="script.js"></script>
+    <script src="analysis.js"></script>
+    </body>
+</html>
