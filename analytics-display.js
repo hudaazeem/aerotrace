@@ -33,7 +33,7 @@ Object.entries(results).forEach(([symptomName, comparisons]) =>{
         const card = document.createElement('div');
         card.className = 'analysis-card';
 
-        const title = document.getElementById("h3");
+        const title = document.createElement("h3");
         title.textContent = labels[result.pollutant];
         card.appendChild(title);
 

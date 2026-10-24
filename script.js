@@ -227,7 +227,7 @@ async function getAirQuality(latitude, longitude){
 }
 
 async function getPollen(latitude, longitude){
-    const response = await fetch (`http://localhost:3000/api/pollen?latitude=${latitude}&longitude=${longitude}`);
+    const response = await fetch (`/api/pollen?latitude=${latitude}&longitude=${longitude}`);
     if(!response.ok){
         throw new Error("Unable to retrieve pollen data");
 

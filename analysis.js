@@ -207,33 +207,3 @@ function analyzeAllSymptoms(observations){
     });
     return results;
 }
-//testing
-const testObservations = [
-    ...Array.from({length: 5 }, (_, i) => ({
-        observationId: `high-${i}`,
-        pm25: 25,
-        treePollen: 4,
-        symptoms: [{name: "Sneezing", severity: 3}]
-    })),
-    ...Array.from({length: 5 }, (_, i) => ({
-        observationId: `low-${i}`,
-        pm25: 5,
-        treePollen: 1,
-        symptoms: []
-    }))
-];
-
-const testResults = analyzeAllSymptoms(testObservations);
-console.log("test results: ", testResults);
-
-
-const savedEntries = JSON.parse(
-    localStorage.getItem('symptoms')
-) || [];
-
-const grouped = groupObservations(savedEntries);
-const prepared = prepareObservations(grouped);
-const analysisResults = analyzeAllSymptoms(prepared);
-
-console.log("prepared oobservations: ", prepared);
-console.log("analysis results:", analysisResults);
