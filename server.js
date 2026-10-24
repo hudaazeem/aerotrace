@@ -1,6 +1,7 @@
 const express = require("express");
 const dotenv = require("dotenv");
-const PORT  = 3000;
+const path = require("path");
+const PORT  = process.env.PORT || 3000;
 const cors = require("cors");
 dotenv.config();
 
@@ -11,12 +12,8 @@ const days = 1;
 
 const pollenApiKey = process.env.GOOGLE_POLLEN_API_KEY;
 
-
-
-console.log("Pollen api key loaded: ", Boolean(pollenApiKey));
-
 const app = express();
-
+app.use(express.static(path.join(__dirname, "public")));
 app.use(cors({
     origin: "http://localhost:5500"
 }));
@@ -74,6 +71,6 @@ app.get("/api/pollen", async (req, res) => {
     }
 });
 
-app.listen(PORT, () => {
-    console.log("AeroTrace server running!");
+app.listen(PORT, "0.0.0.0", () => {
+    console.log(`AeroTrace server running on port ${PORT}`);
 });
