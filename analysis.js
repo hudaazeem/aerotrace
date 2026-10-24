@@ -19,6 +19,12 @@ function prepareObservations(groups){
 
     const newGroups=observations.map(group=>{
         const firstEntry = group[0];
+        const pollenTypes = firstEntry.pollen?.pollenTypes ?? [];
+
+        const treePollen = pollenTypes.find(type => type.code === 'TREE')?.value ?? null;
+        const grassPollen= pollenTypes.find(type => type.code ==='GRASS')?.value ?? null;
+        const weedPollen= pollenTypes.find(type => type.code ==='WEED')?.value ?? null;
+
         const symptomData = group.filter(entry => entry.symptom !== null).map(entry=> {
         return{
             name: entry.symptom,
@@ -34,6 +40,9 @@ function prepareObservations(groups){
             ozone: firstEntry.airQuality?.ozone ?? null,
             no2: firstEntry.airQuality?.no2 ?? null,
             co: firstEntry.airQuality?.co ?? null,
+            treePollen: treePollen,
+            grassPollen: grassPollen,
+            weedPollen: weedPollen,
             symptoms: symptomData
         }
 
@@ -162,7 +171,10 @@ function analyzeSymptom(observations, symptomName){
         aqi: 50, 
         ozone: 60, 
         no2: 20, 
-        co: 500
+        co: 500,
+        treePollen: 3,
+        grassPollen: 3,
+        weedPollen: 3
     }
 
     const pollutants = Object.keys(thresholds);
@@ -175,3 +187,53 @@ function analyzeSymptom(observations, symptomName){
 
     return results;
 }
+
+function analyzeAllSymptoms(observations){
+    const symptomNames = new Set();
+
+    observations.forEach(observation => {
+        observation.symptoms.forEach(symptom => {
+            symptomNames.add(symptom.name);
+        });
+    });
+
+    const results = {};
+
+    symptomNames.forEach(symptomName => {
+        results[symptomName] = analyzeSymptom(
+            observations,
+            symptomName
+        );
+    });
+    return results;
+}
+//testing
+const testObservations = [
+    ...Array.from({length: 5 }, (_, i) => ({
+        observationId: `high-${i}`,
+        pm25: 25,
+        treePollen: 4,
+        symptoms: [{name: "Sneezing", severity: 3}]
+    })),
+    ...Array.from({length: 5 }, (_, i) => ({
+        observationId: `low-${i}`,
+        pm25: 5,
+        treePollen: 1,
+        symptoms: []
+    }))
+];
+
+const testResults = analyzeAllSymptoms(testObservations);
+console.log("test results: ", testResults);
+
+
+const savedEntries = JSON.parse(
+    localStorage.getItem('symptoms')
+) || [];
+
+const grouped = groupObservations(savedEntries);
+const prepared = prepareObservations(grouped);
+const analysisResults = analyzeAllSymptoms(prepared);
+
+console.log("prepared oobservations: ", prepared);
+console.log("analysis results:", analysisResults);
