@@ -25,16 +25,16 @@ if(Object.keys(results).length === 0){
 }
 
 Object.entries(results).forEach(([symptomName, comparisons]) =>{
-    const heading = document.createElement('h2');
-    heading.textContent = symptomName;
-    container.appendChild(heading);
+
 
     comparisons.forEach(result => {
         const card = document.createElement('div');
         card.className = 'analysis-card';
 
         const title = document.createElement("h3");
-        title.textContent = labels[result.pollutant];
+
+
+        title.textContent = `${labels[result.pollutant] ?? result.pollutant ?? "Unknown exposure"} - ${symptomName ?? "Unknown symptom"}`;
         card.appendChild(title);
 
         const description = document.createElement('p');

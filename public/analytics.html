@@ -8,10 +8,22 @@
         <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300..700;1,300..700&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap" rel="stylesheet">
     </head>
     <body>
-        <h1>Environmental Insights</h1>
-        <div id="analyticsResults"></div>
-        <script src="analysis.js "></script>
-        <script src="analytics-display.js "></script>
-
+        <nav class="navbar">
+            <a href = "index.html" class="logo"><span class="aero">Aero</span><span class="trace">Trace</span></a>
+            <div class="nav-links">
+                <a href="index.html" >Home</a>
+                <a href="logger.html" >Log Symptoms</a>
+                <a href="analytics.html" class="active">Analytics</a>
+            </div>
+        </nav>
+        <main class="page-container">
+            <div class="page-heading">
+                <h1>Environmental Insights</h1>
+                <p>Explore possible connections between your symptoms and environmental conditions.</p>
+            </div>
+            <div id="analyticsResults"></div>
+            <script src="analysis.js "></script>
+            <script src="analytics-display.js"></script>
+        </main>
     </body>
 </html>
