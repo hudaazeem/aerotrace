@@ -33,8 +33,8 @@ Object.entries(results).forEach(([symptomName, comparisons]) =>{
 
         const title = document.createElement("h3");
 
-
-        title.textContent = `${labels[result.pollutant] ?? result.pollutant ?? "Unknown exposure"} - ${symptomName ?? "Unknown symptom"}`;
+        const formattedSymptom = symptomName.split(/[- ]/).map(word => word.charAt(0).toUpperCase()+word.slice(1)).join(" ");
+        title.textContent = `${labels[result.pollutant]} - ${formattedSymptom}`
         card.appendChild(title);
 
         const description = document.createElement('p');

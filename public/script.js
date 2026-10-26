@@ -168,7 +168,7 @@ function renderSymptoms() {
 
         actionCell.appendChild(deleteButton);
 
-        symptomCell.innerText = symptom.symptom;
+        symptomCell.innerText = symptom.symptom ?? "No symptoms";
         dateCell.innerText = symptom.date;
         timeCell.innerText = symptom.time;
         severityCell.innerText = symptom.severity;
