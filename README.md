@@ -16,7 +16,6 @@ AeroTrace is a web app I built to help people better understand how environmenta
 
 ## Live Demo
 
-You can try AeroTrace here: **[AeroTrace Live Demo](https://aerotrace-p3ig.onrender.com)**
-*Note: Since AeroTrace is hosted on Render, the website may take a little longer to load initially. 
+You can try AeroTrace here: **[AeroTrace Live Demo]((https://aerotrace-chi.vercel.app/index.html))**
 
 I also submitted AeroTrace to the **2026 Congressional App Challenge!**
